@@ -5,14 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "web:dev": "vite --config ./src/web/vite.config.ts",
+    "web:dev": "vite --config ./web/vite.config.ts",
     "web:preview": "vite --config ./web/vite.config.ts preview",
     "lint": "npm run web:lint && npm run core:lint",
     "lint:fix": "npm run web:lint:fix && npm run core:lint:fix",
-    "web:lint": "eslint -c ./src/web/.eslintrc.js ./src/web/**/*.tsx",
-    "web:lint:fix": "eslint -c ./src/web/.eslintrc.js ./src/web/**/*.tsx --fix",
-    "core:lint": "eslint -c ./src/core/.eslintrc.js ./src/core/**/*.ts",
-    "core:lint:fix": "eslint -c ./src/core/.eslintrc.js ./src/core/**/*.ts --fix"
+    "web:lint": "eslint -c ./web/.eslintrc.js ./web/**/*.tsx",
+    "web:lint:fix": "eslint -c ./web/.eslintrc.js ./web/**/*.tsx --fix",
+    "core:lint": "eslint -c ./core/.eslintrc.js ./core/**/*.ts",
+    "core:lint:fix": "eslint -c ./core/.eslintrc.js ./core/**/*.ts --fix"
   },
   "precommit": [
     "lint:fix",
