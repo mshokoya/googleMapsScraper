@@ -16,7 +16,7 @@ const selectors = {
   googleMapCard: 'div[data-test-id="organic-list-card"]'
 }
 
-export const scrapeGMaps = async (searchStr: string): Promise<void> => {
+export const scrapeGMaps = async (id: string, searchStr: string): Promise<void> => {
   const url = `https://www.google.com/localservices/prolist?hl=en-GB&gl=uk&ssta=1&q=${encodeURIComponent(searchStr)}&oq=${encodeURIComponent(searchStr)}&src=2`
   let scrapedData: Card[] = []
 
@@ -47,13 +47,13 @@ export const scrapeGMaps = async (searchStr: string): Promise<void> => {
         await page.waitForTimeout(5000)
         await getMapsData()
       } catch (e) {
-        fs.writeFileSync(`output-${(Math.random() + 1).toString(36).substring(7)}.csv`, JSON.stringify(scrapedData), 'utf-8')
+        fs.writeFileSync(`output-${id}-${searchStr}.csv`, JSON.stringify(scrapedData), 'utf-8')
 
         console.log('[+] Records saved to CSV file')
         console.log(`[success] Scraped ${scrapedData.length} records in ${(Date.now() - startTime.getTime()) / 1000}s`)
       }
     } else {
-      fs.writeFileSync(`output-${(Math.random() + 1).toString(36).substring(7)}.csv`, JSON.stringify(scrapedData), 'utf-8')
+      fs.writeFileSync(`output-${id}-${searchStr}.csv`, JSON.stringify(scrapedData), 'utf-8')
 
       console.log('[+] Records saved to CSV file')
       console.log(`[success] Scraped ${scrapedData.length} records in ${(Date.now() - startTime.getTime()) / 1000}s`)
@@ -62,3 +62,5 @@ export const scrapeGMaps = async (searchStr: string): Promise<void> => {
 
   await getMapsData()
 }
+
+// (Math.random() + 1).toString(36).substring(7)
