@@ -1,5 +1,6 @@
 import { scraper } from './scraper'
 import { getCardsData } from './dom'
+import { io } from './websocket'
 import fs from 'node:fs'
 
 interface Card {
@@ -17,6 +18,7 @@ const selectors = {
 }
 
 export const scrapeGMaps = async (id: string, searchStr: string): Promise<void> => {
+  io.getIO().emit('scrape', JSON.stringify({ isRunning: true, id }))
   const url = `https://www.google.com/localservices/prolist?hl=en-GB&gl=uk&ssta=1&q=${encodeURIComponent(searchStr)}&oq=${encodeURIComponent(searchStr)}&src=2`
   let scrapedData: Card[] = []
 
@@ -36,6 +38,8 @@ export const scrapeGMaps = async (id: string, searchStr: string): Promise<void> 
     const cards = await page.evaluate(async () => await getCardsData(document))
 
     console.log(`[data] Succesfully scraped ${cards.length} records, continuing to the next page if it's available`)
+
+    io.getIO().emit('data', JSON.stringify({ data: cards }))
 
     scrapedData = scrapedData.concat(cards)
 
@@ -61,6 +65,12 @@ export const scrapeGMaps = async (id: string, searchStr: string): Promise<void> 
   }
 
   await getMapsData()
+    .then(() => {
+      io.getIO().emit('scrape', JSON.stringify({ isRunning: false, id, ok: true }))
+    })
+    .catch(() => {
+      io.getIO().emit('scrape', JSON.stringify({ isRunning: false, id, ok: false }))
+    })
 }
 
 // (Math.random() + 1).toString(36).substring(7)
