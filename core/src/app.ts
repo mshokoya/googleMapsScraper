@@ -35,11 +35,9 @@ export const scrapeGMaps = async (id: string, searchStr: string): Promise<void> 
   await page.waitForTimeout(3000)
 
   const getMapsData = async (): Promise<void> => {
-    const cards = await page.evaluate(async () => await getCardsData(document))
+    const cards = await page.evaluate(async () => await getCardsData(id, document))
 
     console.log(`[data] Succesfully scraped ${cards.length} records, continuing to the next page if it's available`)
-
-    io.getIO().emit('data', JSON.stringify({ data: cards }))
 
     scrapedData = scrapedData.concat(cards)
 

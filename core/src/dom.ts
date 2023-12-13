@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 // @ts-nocheck
 
-export async function getCardsData (document: Document): Promise<Card[]> {
+import { io } from './websocket'
+
+export async function getCardsData (id: string, document: Document): Promise<Card[]> {
   const organicCards = Array.from(document.querySelectorAll('div[data-test-id="organic-list-card"]'))
 
   const cardData = []
@@ -16,14 +18,19 @@ export async function getCardsData (document: Document): Promise<Card[]> {
       const address = document.querySelector('.fccl3c') ? document.querySelector('.fccl3c').innerText : 'NONE'
       const rating = document.querySelector('.pNFZHb .rGaJuf').innerHTML ? document.querySelector('.pNFZHb .rGaJuf').innerHTML : 'NONE'
       const ratingNumber = document.querySelector('.QwSaG .leIgTe').innerHTML.replace(/\(|\)/g, '')
-      cardData.push({
+
+      const data = {
         name,
         address,
         phone: phoneNumber === 'NONE' ? phoneNumber : phoneNumber,
         website,
         rating,
         ratingNumber
-      })
+      }
+
+      io.getIO().emit('field', { id, data: cards })
+
+      cardData.push(data)
     } catch (e) {
       console.log(e)
     }
