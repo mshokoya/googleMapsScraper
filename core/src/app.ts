@@ -18,7 +18,7 @@ const selectors = {
 }
 
 export const scrapeGMaps = async (id: string, searchStr: string): Promise<void> => {
-  io.getIO().emit('scrape', JSON.stringify({ isRunning: true, id }))
+  io.getIO().emit('status', { status: true, id })
   const url = `https://www.google.com/localservices/prolist?hl=en-GB&gl=uk&ssta=1&q=${encodeURIComponent(searchStr)}&oq=${encodeURIComponent(searchStr)}&src=2`
   let scrapedData: Card[] = []
 
@@ -66,10 +66,10 @@ export const scrapeGMaps = async (id: string, searchStr: string): Promise<void> 
 
   await getMapsData()
     .then(() => {
-      io.getIO().emit('scrape', JSON.stringify({ isRunning: false, id, ok: true }))
+      io.getIO().emit('status', { status: false, id })
     })
     .catch(() => {
-      io.getIO().emit('scrape', JSON.stringify({ isRunning: false, id, ok: false }))
+      io.getIO().emit('status', { status: false, id })
     })
 }
 
