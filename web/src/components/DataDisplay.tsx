@@ -11,7 +11,7 @@ export const DataDisplay = ({selectedID}: DataDisplayProps) => {
 
   if (!data[selectedID]) {
     console.log('eeyyaa')
-    return (<div className='text-amber-500'> Start Scraping </div>)
+    return (<div className="bg-[#3c3c50] flex-auto"> Start Scraping </div>)
   }
 
 
@@ -24,7 +24,7 @@ export const DataDisplay = ({selectedID}: DataDisplayProps) => {
   })
 
   return (
-    <div>
+    <div className="bg-[#3c3c50]">
       <table>
         <tr>{tableColTitle}</tr>
         {tableRowsData}

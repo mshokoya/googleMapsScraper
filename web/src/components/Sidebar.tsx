@@ -13,15 +13,17 @@ export const Sidebar = ({ setSelectedID }: SidebarProps) => {
   const handleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    if (!search) return
+
     const d = scrapeUrl(search)
     setSelectedID(d.id)
   }
 
   return (
-    <div>
+    <div className="bg-black text-white">
       <form onSubmit={handleSearch}>
         <input value={search} onChange={(e) => { setSearch(e.currentTarget.value) }} />
-        <input type='sumbit' value='search' disabled={isScraping.status} />
+        <input type='submit' value='search' disabled={isScraping.status} />
       </form>
     </div>
   )

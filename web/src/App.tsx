@@ -6,8 +6,7 @@ function App() {
   const [selectedID, setSelectedID] = useState('')
 
   return (
-    <div>
-      dasjhsdklda
+    <div className="flex h-screen">
       <Sidebar setSelectedID={setSelectedID} />
       <DataDisplay selectedID={selectedID} />
     </div>
