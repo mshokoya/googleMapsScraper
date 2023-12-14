@@ -9,7 +9,7 @@ export const io: IClientSocketIO = (() => {
   let IO: Socket;
 
   const startWebSocketServer = () => {
-    IO = connect('http://localhost:4000')
+    IO = connect('http://localhost:3000')
   }
 
   return {

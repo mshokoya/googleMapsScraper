@@ -8,12 +8,12 @@ interface DataDisplayProps {
 export const DataDisplay = ({selectedID}: DataDisplayProps) => {
   const { data } = useContext(GlobalContext);
 
-  if (
-    (data[selectedID] !== undefined) && 
-    (data[selectedID][0] === undefined)
-  ) {
-    return (<div> Start Scraping </div>)
+
+  if (!data[selectedID]) {
+    console.log('eeyyaa')
+    return (<div className='text-amber-500'> Start Scraping </div>)
   }
+
 
   const tableColTitle = Object.keys(data[selectedID][0]).map(c => <th>{ c }</th>)
   const tableRowsData = data[selectedID].map((dataObj) => {
