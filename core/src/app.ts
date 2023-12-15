@@ -1,7 +1,7 @@
 import { scraper } from './scraper'
-import { getCardsData } from './dom'
 import { io } from './websocket'
 import fs from 'node:fs'
+import { getCardsData } from './dom'
 
 interface Card {
   name: string
@@ -18,7 +18,7 @@ const selectors = {
 }
 
 export const scrapeGMaps = async (id: string, searchStr: string): Promise<void> => {
-  io.getIO().emit('status', { status: true, id })
+  io.getWebSocketIO().emit('status', { status: true, id })
   const url = `https://www.google.com/localservices/prolist?hl=en-GB&gl=uk&ssta=1&q=${encodeURIComponent(searchStr)}&oq=${encodeURIComponent(searchStr)}&src=2`
   let scrapedData: Card[] = []
 
@@ -35,7 +35,7 @@ export const scrapeGMaps = async (id: string, searchStr: string): Promise<void> 
   await page.waitForTimeout(3000)
 
   const getMapsData = async (): Promise<void> => {
-    const cards = await page.evaluate(async () => await getCardsData(id, document))
+    const cards = await getCardsData(id)
 
     console.log(`[data] Succesfully scraped ${cards.length} records, continuing to the next page if it's available`)
 
@@ -49,25 +49,29 @@ export const scrapeGMaps = async (id: string, searchStr: string): Promise<void> 
         await page.waitForTimeout(5000)
         await getMapsData()
       } catch (e) {
-        fs.writeFileSync(`output-${id}-${searchStr}.csv`, JSON.stringify(scrapedData), 'utf-8')
+        fs.writeFileSync(`output-${id}-${searchStr}.json`, JSON.stringify(scrapedData), 'utf-8')
 
-        console.log('[+] Records saved to CSV file')
+        console.log('[+] Records saved to JSON file')
         console.log(`[success] Scraped ${scrapedData.length} records in ${(Date.now() - startTime.getTime()) / 1000}s`)
       }
     } else {
-      fs.writeFileSync(`output-${id}-${searchStr}.csv`, JSON.stringify(scrapedData), 'utf-8')
+      fs.writeFileSync(`output-${id}-${searchStr}.json`, JSON.stringify(scrapedData), 'utf-8')
 
-      console.log('[+] Records saved to CSV file')
+      console.log('[+] Records saved to JSON file')
       console.log(`[success] Scraped ${scrapedData.length} records in ${(Date.now() - startTime.getTime()) / 1000}s`)
     };
   }
 
   await getMapsData()
-    .then(() => {
-      io.getIO().emit('status', { status: false, id })
+    .then(async () => {
+      io.getWebSocketIO().emit('status', { status: false, id })
+      await scraper.close()
     })
-    .catch(() => {
-      io.getIO().emit('status', { status: false, id })
+    .catch(async (err: any) => {
+      console.log('error')
+      console.log(err)
+      io.getWebSocketIO().emit('status', { status: false, id })
+      await scraper.close()
     })
 }
 

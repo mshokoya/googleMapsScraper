@@ -1,9 +1,8 @@
 import { io } from './websocket'
-// import { scrapeGMaps } from './app';
+// import { scrapeGMaps } from './app'
 
-io.startWebSocketServer(3000)
+io.initWebSocketServer()
 
-io.getIO().on('startScrape', (arg) => {
-  console.log(arg.id)
-  console.log(arg.string)
-})
+io.listen(3000)
+
+// fdhgjkfhcvjhb

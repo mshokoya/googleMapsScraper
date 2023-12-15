@@ -6,6 +6,7 @@
   "scripts": {
     "start": "concurrently \"npm run core:dev\" \"npm run web:dev\" ",
     "core:dev": "ts-node core/src/index.ts",
+    "core:dev:debug": "ts-node-dev --inspect=4321 core/src/index.ts",
     "web:dev": "vite --config ./web/vite.config.ts",
     "web:preview": "vite --config ./web/vite.config.ts preview",
     "lint": "npm run web:lint && npm run core:lint",
@@ -50,6 +51,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "socket.io": "^4.7.2",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "ts-node-dev": "^2.0.0"
   }
 }

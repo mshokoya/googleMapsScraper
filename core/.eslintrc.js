@@ -24,6 +24,8 @@ module.exports = {
     "rules": {
         "@typescript-eslint/consistent-type-imports": "off",
         "@typescript-eslint/ban-ts-comment": "off",
-        "@typescript-eslint/prefer-ts-expect-error": "off"
+        "@typescript-eslint/prefer-ts-expect-error": "off",
+        "@typescript-eslint/return-await": "off",
+        "@typescript-eslint/unbound-method": "off"
     }
 }

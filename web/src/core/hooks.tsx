@@ -24,6 +24,7 @@ export const useWebsocket = (): UseWebsocket => {
   const scrapeUrl = (url: string) => {
     const id = (Math.random() + 1).toString(36).substring(7)
     const data = {id, url}
+
     io.getIO().emit('startScrape', data )
     return data
   }
