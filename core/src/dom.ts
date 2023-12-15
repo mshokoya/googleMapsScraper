@@ -1,16 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 // @ts-nocheck
-
-import { io } from './websocket'
 import { scraper } from './scraper'
 
 export async function getCardsData (id: string): Promise<Card[]> {
   const page = scraper.getPage()
-  await page.exposeFunction('searchID', getCardsData)
-  await page.exposeFunction('getCardsData', getCardsData)
-  await page.exposeFunction('io', io.getWebSocketIO().emit)
 
-  return page.evaluate(async () => {
+  return page.evaluate(async (id, io) => {
     const organicCards = Array.from(document.querySelectorAll('div[data-test-id="organic-list-card"]'))
 
     const cardData = []
@@ -35,8 +30,6 @@ export async function getCardsData (id: string): Promise<Card[]> {
           ratingNumber
         }
 
-        window.emit('field', { id, data: cards })
-
         cardData.push(data)
       } catch (e) {
         console.log(e)
@@ -44,5 +37,5 @@ export async function getCardsData (id: string): Promise<Card[]> {
     };
 
     return cardData
-  }, id)
+  })
 }

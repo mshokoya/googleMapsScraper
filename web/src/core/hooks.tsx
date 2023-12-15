@@ -37,7 +37,7 @@ export const useWebsocket = (): UseWebsocket => {
 
 type ScrapeDataStructure = {name: string, address: string, phone: string, website: string, rating: string, ratingNumber: string}
 type ScrapeDataState = {[id: string]: ScrapeDataStructure[]}
-type ScrapeNewFieldRes = {id: string, data: ScrapeDataStructure}
+type ScrapeNewFieldRes = {id: string, data: ScrapeDataStructure[]}
 type ScrapeDataRes = {id: string, data: ScrapeDataStructure[]}
 type ScrapeAllDataRes = {[id:string]: ScrapeDataStructure[]}
 
@@ -52,10 +52,13 @@ export const useScrapeData = (): UseScrapeData => {
   const [data, setData] = useState<ScrapeDataState>({})
 
   io.getIO().on('field', (msg: ScrapeNewFieldRes) => {
-    const d = [...data[msg.id]]
-    d.push(msg.data)
 
-    setData({...data, [msg.id]: d})
+    setData( prev => (
+      {
+        ...prev, 
+        [msg.id]: [...prev[msg.id], ...msg.data]
+      }
+    )) 
   })
 
   io.getIO().on('getAllData', (msg: ScrapeAllDataRes) => {
@@ -75,6 +78,8 @@ export const useScrapeData = (): UseScrapeData => {
   }
 
   const newSearchField = (args: ScrapeReqArgs): void => {
+    console.log('state')
+    console.log({...data, [args.id]: []})
     setData({...data, [args.id]: []})
   }
 

@@ -39,6 +39,7 @@ export const scrapeGMaps = async (id: string, searchStr: string): Promise<void> 
 
     console.log(`[data] Succesfully scraped ${cards.length} records, continuing to the next page if it's available`)
 
+    io.getWebSocketIO().emit('field', { id, data: cards })
     scrapedData = scrapedData.concat(cards)
 
     const nextButton = await page.$('button[aria-label="Next"]')
