@@ -21,7 +21,7 @@ export const useWebsocket = (): UseWebsocket => {
       : setIsScraping({status, id: null})
   })
 
-  const scrapeUrl = (url: string) => {
+  const scrapeUrl = (url: string): ScrapeReqArgs => {
     const id = (Math.random() + 1).toString(36).substring(7)
     const data = {id, url}
 
@@ -45,6 +45,7 @@ export type UseScrapeData = {
   getAllData: () => void
   getData: (id: string) => void
   data: ScrapeDataState
+  newSearchField: (args: ScrapeReqArgs) => void
 }
 
 export const useScrapeData = (): UseScrapeData => {
@@ -73,10 +74,15 @@ export const useScrapeData = (): UseScrapeData => {
     io.getIO().emit('getAllData')
   }
 
+  const newSearchField = (args: ScrapeReqArgs): void => {
+    setData({...data, [args.id]: []})
+  }
+
   return {
     getAllData,
     getData,
     data,
+    newSearchField
   }
 
 }
