@@ -10,7 +10,6 @@ export const DataDisplay = ({selectedID}: DataDisplayProps) => {
 
 
   if (!data[selectedID]) {
-    console.log('eeyyaa')
     return (<div className="bg-[#3c3c50] flex-auto"> Start Scraping </div>)
   }
 
@@ -20,9 +19,7 @@ export const DataDisplay = ({selectedID}: DataDisplayProps) => {
     : "... Getting Results, Beep Boop ..."
 
   const tableRowsData = data[selectedID].map((dataObj) => {
-    // const data = Object.keys(dataObj).map(v => <td>{dataObj[v]}</td>)
     const data = Object.values(dataObj).map(v => <td>{ v }</td>)
-    
     return <tr>{ data }</tr>
   })
 
