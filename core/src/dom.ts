@@ -2,10 +2,10 @@
 // @ts-nocheck
 import { scraper } from './scraper'
 
-export async function getCardsData (id: string): Promise<Card[]> {
+export async function getCardsData (): Promise<Card[]> {
   const page = scraper.getPage()
 
-  return page.evaluate(async (id, io) => {
+  return page.evaluate(async () => {
     const organicCards = Array.from(document.querySelectorAll('div[data-test-id="organic-list-card"]'))
 
     const cardData = []
@@ -21,16 +21,14 @@ export async function getCardsData (id: string): Promise<Card[]> {
         const rating = document.querySelector('.pNFZHb .rGaJuf').innerHTML ? document.querySelector('.pNFZHb .rGaJuf').innerHTML : 'NONE'
         const ratingNumber = document.querySelector('.QwSaG .leIgTe').innerHTML.replace(/\(|\)/g, '')
 
-        const data = {
+        cardData.push({
           name,
           address,
           phone: phoneNumber === 'NONE' ? phoneNumber : phoneNumber,
           website,
           rating,
           ratingNumber
-        }
-
-        cardData.push(data)
+        })
       } catch (e) {
         console.log(e)
       }
